@@ -3,6 +3,9 @@
 #include <windows.h>
 #include <ctype.h>
 #include "biblio.h"
+#include "file.h"
+#include "stimulation.h"
+
 #define K_CHAUFFE 0.5f
 #define K_COOL    0.1f
 #define T_AMB     20.0f
@@ -24,19 +27,13 @@ int main(){
         printf("_____________________________________________________________________________\n");
         //on va empecher l'utilisateur d'ecrire des lettres ou des phrases A PART "A" pour accelerer et "F" pour freiner
         do{
-            printf("Entrez 'A' pour accelerer ou 'F' pour freiner ou 'Q' pour quitter : ");
+            printf("Entrez 'A' pour accelerer ou 'F' pour freiner ");
              // Lire une ligne complète
             if (fgets(ligne, sizeof(ligne), stdin) != NULL) {
                 // Prendre le premier caractère et le mettre en majuscule
                 acceleration = toupper(ligne[0]);
             }
-        } while (acceleration != 'A' && acceleration != 'F' && acceleration != 'Q');
-
-        if (acceleration == 'Q') {
-            f.etat=SORTIE_UTILISATEUR;  
-            dump_memory(&bn);
-            break;
-        }
+        } while (acceleration != 'A' && acceleration != 'F' );
 
         if (acceleration == 'A') {
             vitesse+=5.0;    
@@ -45,12 +42,16 @@ int main(){
         } else if (acceleration == 'F') {
 
             if (vitesse<0){
-                vitesse=0;   
-            }
-            else{
-            vitesse-=7.0;
-            temperature_moteur = temperature_moteur+ (K_CHAUFFE * vitesse)  - (K_COOL * (temperature_moteur - T_AMB));
-            }
+                vitesse=0;}
+
+            else if(vitesse == 0) {
+                vitesse = 0;}
+
+            else if (vitesse>=7.0){
+                    vitesse-=7.0;   
+                    temperature_moteur = temperature_moteur+ (K_CHAUFFE * vitesse)  - (K_COOL * (temperature_moteur - T_AMB));
+                }
+              
         }
         enregistrer_cycle(&bn, t, vitesse, temperature_moteur);
 
@@ -71,7 +72,7 @@ int main(){
             dump_memory(&bn);
             break;
         }
-        if (vitesse == 0) {
+        if (vitesse == 0 || (acceleration=='F' && (vitesse-7.0<0))) {
             printf("Vehicule a l'arret.\n");
             f.etat = ETAT_ARRET;
             dump_memory(&bn);

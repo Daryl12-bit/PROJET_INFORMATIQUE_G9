@@ -1,12 +1,12 @@
 #ifndef BIBLIO_H
 #define BIBLIO_H
+
     // On debute avec les structures 
      typedef enum {
-        SORTIE_UTILISATEUR,
         ETAT_ARRET,
         ETAT_SURCHAUFFE
     } EtatSysteme; 
-    
+
     typedef struct Frame {
        long timestamp;
        float vitesse;
@@ -28,7 +28,6 @@
     void initialiser_frame(Frame *f, long timestamp, float vitesse, float temperature_moteur);
     void ajouter_frame(BoiteNoire *bn, Frame *f);
     void enregistrer_cycle(BoiteNoire *bn, long timestamp, float vitesse, float temperature_moteur);
-    void dump_memory(BoiteNoire *bn);
-    void analyse_crash();
+    
 
 #endif
