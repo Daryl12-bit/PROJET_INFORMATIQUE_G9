@@ -4,13 +4,15 @@
     // On debute avec les structures 
      typedef enum {
         ETAT_ARRET,
-        ETAT_SURCHAUFFE
+        ETAT_SURCHAUFFE,
+        ETAT_CHOC
     } EtatSysteme; 
 
     typedef struct Frame {
        long timestamp;
        float vitesse;
        float temperature_moteur;
+       float acceleration;
        EtatSysteme etat;
        struct Frame *suivant;
     } Frame;
@@ -25,9 +27,9 @@
 
     // Fin des structures
     // Déclaration des fonctions (s'il y en a)
-    void initialiser_frame(Frame *f, long timestamp, float vitesse, float temperature_moteur);
+    void initialiser_frame(Frame *f, long timestamp, float vitesse, float temperature_moteur,EtatSysteme etat, float delta_v);
     void ajouter_frame(BoiteNoire *bn, Frame *f);
-    void enregistrer_cycle(BoiteNoire *bn, long timestamp, float vitesse, float temperature_moteur);
+  
     
 
 #endif

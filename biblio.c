@@ -3,10 +3,12 @@
 #include "biblio.h"
 
 
-void initialiser_frame(Frame *f, long timestamp, float vitesse, float temperature_moteur) {
+void initialiser_frame(Frame *f, long timestamp, float vitesse, float temperature_moteur, EtatSysteme etat, float delta_v) {
     f->timestamp = timestamp;
     f->vitesse = vitesse;
     f->temperature_moteur = temperature_moteur;
+    f->acceleration= delta_v;
+    f->etat = etat; // Valeur par défaut
     f->suivant = NULL;
 
 }
@@ -18,7 +20,6 @@ void ajouter_frame(BoiteNoire *bn, Frame *f) {
     }
     *nouvelle_frame = *f;
     nouvelle_frame->suivant = NULL;
-
     if (bn->debut == NULL) {
         bn->debut = nouvelle_frame;
     } else {
