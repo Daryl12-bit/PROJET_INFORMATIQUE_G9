@@ -13,7 +13,7 @@ void enregistrer_cycle(BoiteNoire *bn, long timestamp, float vitesse, float temp
 
     if (f.etat != ETAT_CHOC) {
         printf("\033[32m_____________________________________________________________________________\033[0m\n");
-        printf("\033[33m   (Memoire : %d/10)\033[0m\n", bn->nb_frames);
+        printf("\033[33m  Enregistrement Frame %d  (Memoire : %d/10)\033[0m\n", f.timestamp, bn->nb_frames);
         
     }
     }

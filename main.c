@@ -179,19 +179,14 @@ int main(){
              // Vérification 2 : Limites physiques de décélération
             if (delta_v < DECEL_MAX_NORMAL) {
                 setColor(RED);
-               printf("ATTENTION : FREINAGE D'URGENCE DETECTE !\n");
+                printf("ATTENTION : FREINAGE D'URGENCE DETECTE !\n");
+                printf("CRASH ! Freinage insuffisant pour eviter l'obstacle.\n");
+                vitesse = vitesse_souhaite;
+                etat = ETAT_CHOC;
+                enregistrer_cycle(&bn, t, vitesse, temperature_moteur,etat,delta_v);
+                dump_memory(&bn);
                setColor(RESET);
-                // Chance de crash malgré le freinage (ex: 30%)
-                if (rand() % 100 < 80) {
-                    printf("CRASH ! Freinage insuffisant pour eviter l'obstacle.\n");
-                    vitesse = vitesse_souhaite;
-                    etat = ETAT_CHOC;
-                    enregistrer_cycle(&bn, t, vitesse, temperature_moteur,etat,delta_v);
-                    dump_memory(&bn);
-                    break;
-                } else {
-                    printf("Obstacle evite de justesse !\n");
-                }
+               break;
             }
 
             temperature_moteur = temperature_moteur + (K_CHAUFFE *  vitesse) - (K_COOL * (temperature_moteur - T_AMB));       
