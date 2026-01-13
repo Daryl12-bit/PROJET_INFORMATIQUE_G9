@@ -2,7 +2,7 @@
 #include "file.h"
 
 void dump_memory(BoiteNoire *bn){
-        FILE *fichier = fopen("boite_noire_dump.bin", "wb");
+        FILE *fichier = fopen("crash.bin", "wb");
         if (fichier == NULL) {
            perror("Erreur lors de louverture du fichier de dump");
             return;
@@ -16,7 +16,7 @@ void dump_memory(BoiteNoire *bn){
     }
 
     void analyse_crash(){
-    FILE *fichier = fopen("boite_noire_dump.bin", "rb");
+    FILE *fichier = fopen("crash.bin", "rb");
     if(!fichier){ perror("Erreur lecture crash.bin"); return; }
 
     Frame f;
