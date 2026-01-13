@@ -33,7 +33,7 @@ void ajouter_frame(BoiteNoire *bn, Frame *f) {
     bn->frame_actuelle++;
 
     if (bn->nb_frames>10){
-        printf("Rotation : Frame ancienne ecrasee.\n");
+        printf("\033[31mRotation : Frame ancienne ecrasee.\033[0m\n");
         Frame *temp = bn->debut;
         bn->debut = bn->debut->suivant;
         free(temp);
