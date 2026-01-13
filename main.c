@@ -10,6 +10,7 @@
 #include "acces.h"
 
 
+
 #define K_CHAUFFE 0.5f
 #define K_COOL    0.1f
 #define T_AMB     20.0f
@@ -234,5 +235,6 @@ int main(){
     printf("Simulation terminee.\n");
     setColor(RESET);
     analyse_crash();
+    setColor(RESET);
     return 0;
 }

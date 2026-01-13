@@ -2,7 +2,7 @@
 #include "file.h"
 
 void dump_memory(BoiteNoire *bn){
-        FILE *fichier = fopen("boite_noire_dump.bin", "wb");
+        FILE *fichier = fopen("crash.bin", "wb");
         if (fichier == NULL) {
            perror("Erreur lors de louverture du fichier de dump");
             return;
@@ -16,7 +16,7 @@ void dump_memory(BoiteNoire *bn){
     }
 
     void analyse_crash(){
-    FILE *fichier = fopen("boite_noire_dump.bin", "rb");
+    FILE *fichier = fopen("crash.bin", "rb");
     if(!fichier){ perror("Erreur lecture crash.bin"); return; }
 
     Frame f;
@@ -55,25 +55,29 @@ void dump_memory(BoiteNoire *bn){
     printf("Analyse des donnees de la boite noire :\n");
     printf("Cause probable du crash : ");
 
+    printf("\033[31m");
     if(f.etat == ETAT_SURCHAUFFE){
-        printf("\033[31mSurchauffe du moteur\n");
+        printf("Surchauffe du moteur\n");
     }
     else if(f.etat == ETAT_CHOC){
         printf("Collision (freinage d'urgence)\n");
     }
     else if(f.etat == ETAT_ARRET){
-        printf("Vehicule a l'arret\033[0m\n");
+        printf("Vehicule a l'arret\n");
     } 
+    printf("\033[0m");
     
     if(nb>0){
-        printf("\033[32mVitesse moyenne: %.2f km/h\n", somme_v / nb);
+        printf("\033[32m");
+        printf("Vitesse moyenne: %.2f km/h\n", somme_v / nb);
         printf("Nombre de frames analysees: %d\n", nb);
         printf("Temperature maximale: %.2f C\n", temp_max);
-        
+        printf("\033[0m");
         // --- COMPORTEMENT PILOTE (3 lignes) ---
         printf("\nComportement pilote : ");
         float vitesse_moyenne = somme_v / nb;
-        
+
+         printf("\033[36m");
         if(vitesse_moyenne > 100.0f) {
             printf("Vitesse tres elevee maintenue\n");
         }
@@ -84,8 +88,9 @@ void dump_memory(BoiteNoire *bn){
             printf("Conduite sportive (vitesse et temperature elevees)\n");
         }
         else {
-            printf("Conduite normale\033[0m\n");
+            printf("Conduite normale\n");
         }
+        printf("\033[0m");
         // --- FIN COMPORTEMENT ---
     }
     fclose(fichier);
