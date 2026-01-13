@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include "biblio.h"
 #include "file.h"
-#include "stimulation.h"
+#include "simulation.h"
 #include <math.h>
 #include <time.h>
 #include "acces.h"

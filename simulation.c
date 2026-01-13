@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "biblio.h"
-#include "stimulation.h"
+#include "simulation.h"
 
 void setColor(const char* color) {
     printf("%s", color);
