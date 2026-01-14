@@ -188,6 +188,9 @@ int main(){
 
         if (vitesse == 0 && !(delta_v < DECEL_MAX_NORMAL)) {
             etat = ETAT_ARRET; 
+            setColor(RED);
+                printf("Voiture a larret !\n");
+            setColor(RESET);
             enregistrer_cycle(&bn, t, vitesse, temperature_moteur,etat, delta_v);
             dump_memory(&bn);
            
@@ -200,6 +203,8 @@ int main(){
         }
         else if (temperature_moteur >= TEMP_MAX) {
             etat = ETAT_SURCHAUFFE;
+            setColor(RED);
+                printf("ATTENTION : Surchauffe du moteur detectee !\n");
             enregistrer_cycle(&bn, t, vitesse, temperature_moteur,etat, delta_v);
             dump_memory(&bn);
         }else{
