@@ -53,4 +53,4 @@ Les règles GitHub ont été configurées pour imposer l’utilisation de branch
 5. Liens du projet
 
 📁 GitHub :
-👉 https://github.com/Daryl12-bit/PROJET_INFORMATIQUE
+https://github.com/Daryl12-bit/PROJET_INFORMATIQUE_G9
