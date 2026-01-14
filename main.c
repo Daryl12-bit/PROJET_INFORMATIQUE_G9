@@ -5,7 +5,6 @@
 #include "biblio.h"
 #include "file.h"
 #include "simulation.h"
-#include <math.h>
 #include <time.h>
 #include "acces.h"
 
@@ -17,7 +16,6 @@
 #define TEMP_MAX  110.0f
  #define ACCEL_MAX 12.0f   // km/h/s
 #define DECEL_MAX_NORMAL -30.0f  // km/h/s
-#define  K_FREIN 0.1f  // Au lieu de K_CHAUFFE = 0.5
 #define RED "\033[31m"
 #define GREEN "\033[32m"
 #define RESET "\033[0m"
@@ -51,11 +49,8 @@ int main(){
         return 1;
     }
 
-    srand((unsigned int)time(NULL));  // AJOUTÉ 
     //important pour rand du bas 
-    BoiteNoire bn;
-    Frame f;
-    // maintenat on va mettre un temps en seconde qui aviendra à 10s
+    BoiteNoire bn;    
     bn.debut = NULL;
     bn.nb_frames = 0;
     bn.frame_actuelle = 0;
@@ -182,12 +177,7 @@ int main(){
                 setColor(RED);
                 printf("ATTENTION : FREINAGE D'URGENCE DETECTE !\n");
                 printf("CRASH ! Freinage insuffisant pour eviter l'obstacle.\n");
-                vitesse = vitesse_souhaite;
-                etat = ETAT_CHOC;
-                enregistrer_cycle(&bn, t, vitesse, temperature_moteur,etat,delta_v);
-                dump_memory(&bn);
                setColor(RESET);
-               break;
             }
 
             temperature_moteur = temperature_moteur + (K_CHAUFFE *  vitesse) - (K_COOL * (temperature_moteur - T_AMB));       
@@ -196,11 +186,17 @@ int main(){
          // Mise à jour de la vitesse
         vitesse = vitesse_souhaite;
 
-        if (vitesse == 0) {
+        if (vitesse == 0 && !(delta_v < DECEL_MAX_NORMAL)) {
             etat = ETAT_ARRET; 
             enregistrer_cycle(&bn, t, vitesse, temperature_moteur,etat, delta_v);
             dump_memory(&bn);
            
+        }
+        else if (delta_v < DECEL_MAX_NORMAL) {
+            etat = ETAT_CHOC;
+            enregistrer_cycle(&bn, t, vitesse, temperature_moteur,etat,delta_v);
+            dump_memory(&bn);
+            
         }
         else if (temperature_moteur >= TEMP_MAX) {
             etat = ETAT_SURCHAUFFE;
@@ -219,10 +215,7 @@ int main(){
             printf("Vitesse: %.2f km/h, Temperature Moteur: %.2f C\n", temp->vitesse, temp->temperature_moteur);
             setColor(RESET);
         }
-         if (vitesse == 0) {
-            break;
-        }
-        else if (temperature_moteur >= TEMP_MAX) {
+        if (vitesse == 0 || temperature_moteur >= TEMP_MAX || delta_v < DECEL_MAX_NORMAL) {
             break;
         }
         t++;
@@ -235,6 +228,5 @@ int main(){
     printf("Simulation terminee.\n");
     setColor(RESET);
     analyse_crash();
-    setColor(RESET);
     return 0;
 }

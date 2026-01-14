@@ -23,14 +23,18 @@ void dump_memory(BoiteNoire *bn){
     float somme_v = 0;
     float temp_max = 0;
     int nb = 0;
-    
+    int a_crash_frame = 0;
+    Frame last_frame;
     // Pour comportement pilote
     float vitesses[10];  // Stocke les vitesses récentes
     int idx = 0;
     int freinage_brusque = 0;
-    float derniere_vitesse = 0;
-
     while(fread(&f, sizeof(Frame), 1, fichier)){
+        last_frame = f;
+        if(f.etat == ETAT_SURCHAUFFE || f.etat == ETAT_CHOC || f.etat == ETAT_ARRET) {
+            a_crash_frame = 1;
+        }
+        else{
         somme_v += f.vitesse;
         if(f.temperature_moteur > temp_max) temp_max = f.temperature_moteur;
         
@@ -46,12 +50,11 @@ void dump_memory(BoiteNoire *bn){
             if(chute > 30.0f) {
                 freinage_brusque = 1;
             }
-        }
-        
-        derniere_vitesse = f.vitesse;
+        } 
         nb++;
+        }
     }
-
+    
     printf("Analyse des donnees de la boite noire :\n");
     printf("Cause probable du crash : ");
 
@@ -73,7 +76,8 @@ void dump_memory(BoiteNoire *bn){
         printf("Nombre de frames analysees: %d\n", nb);
         printf("Temperature maximale: %.2f C\n", temp_max);
         printf("\033[0m");
-        // --- COMPORTEMENT PILOTE (3 lignes) ---
+        
+        // --- COMPORTEMENT PILOTE  ---
         printf("\nComportement pilote : ");
         float vitesse_moyenne = somme_v / nb;
 

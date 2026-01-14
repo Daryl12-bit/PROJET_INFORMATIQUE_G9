@@ -8,7 +8,7 @@ void initialiser_frame(Frame *f, long timestamp, float vitesse, float temperatur
     f->vitesse = vitesse;
     f->temperature_moteur = temperature_moteur;
     f->acceleration= delta_v;
-    f->etat = etat; // Valeur par défaut
+    f->etat = etat; 
     f->suivant = NULL;
 
 }
@@ -30,7 +30,7 @@ void ajouter_frame(BoiteNoire *bn, Frame *f) {
         temp->suivant = nouvelle_frame;
     }
     bn->nb_frames++;
-    bn->frame_actuelle++;
+
 
     if (bn->nb_frames>10){
         printf("\033[31mRotation : Frame ancienne ecrasee.\033[0m\n");
